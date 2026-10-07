@@ -165,6 +165,47 @@
   .conecta .gap{height:34px}
   .conecta .sub{max-width:430px;margin:10px auto 0;font-size:12.5px;color:var(--soft);line-height:1.6}
 
+  /* ---- Ficha do produto (toque no card): foto, cores e medidas — sem marca e sem preço ---- */
+  .card[data-nome]:not(.camp-card) .frame{cursor:pointer}
+  .ver-ficha{margin-top:9px;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--champagne);cursor:pointer;background:none;border:0;font-family:inherit}
+  .fundo{position:fixed;inset:0;background:rgba(30,32,24,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
+  .fundo.on{opacity:1;pointer-events:auto}
+  .ficha{position:fixed;left:0;right:0;bottom:0;z-index:91;background:var(--bg);border-radius:18px 18px 0 0;max-height:92vh;overflow-y:auto;
+         padding:14px 22px 26px;transform:translateY(105%);transition:transform .35s cubic-bezier(.16,.8,.3,1);box-shadow:0 -10px 40px rgba(30,32,24,.25)}
+  .ficha.on{transform:none}
+  .ficha .alca{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px}
+  .ficha .fechar{position:absolute;top:8px;right:12px;width:38px;height:38px;border:0;background:transparent;font-size:26px;color:var(--ink);cursor:pointer}
+  .ficha .fpic{background:var(--studio);aspect-ratio:4/5;max-height:46vh;margin:0 auto;overflow:hidden}
+  .ficha .fpic img{width:100%;height:100%;object-fit:cover;display:block}
+  .ficha .fnome{margin-top:16px;font-size:13px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;text-align:center}
+  .ficha .ffrase{margin-top:6px;font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.3;text-align:center;color:var(--soft)}
+  .ficha .fcores{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:16px 0 4px}
+  .ficha .fcores .dot{width:22px;height:22px}
+  .ficha .fcornome{text-align:center;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);min-height:16px;margin-bottom:14px}
+  .ficha .ftec{border-top:1px solid var(--line);margin:4px 0 18px}
+  .ficha .ftec h4{font-size:10.5px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--champagne);margin:16px 0 4px}
+  .ficha .fl{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .ficha .fl span{color:var(--soft);letter-spacing:.04em}
+  .ficha .fl b{font-weight:500;text-align:right}
+  .ficha .fmed{padding:10px 0 6px;border-bottom:1px solid var(--line)}
+  .ficha .fmed-t{font-size:11px;letter-spacing:.06em;color:var(--soft);margin-bottom:8px}
+  .ficha .fmed-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr));gap:6px}
+  .ficha .fmed-g div{border:1px solid var(--line);border-radius:4px;text-align:center;padding:5px 2px;background:#fff}
+  .ficha .fmed-g span{display:block;font-size:10.5px;color:var(--soft)}
+  .ficha .fmed-g b{display:block;font-size:13px;font-weight:600}
+  .ficha .facoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ficha .facoes button{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:14px 8px;
+         border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;border-radius:3px}
+  .ficha .facoes button.pri{background:var(--ink);color:#fff}
+  .aviso{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:#fff;font-size:12px;letter-spacing:.08em;
+         padding:12px 18px;border-radius:3px;z-index:95;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+  .aviso.on{opacity:1;transform:translate(-50%,0)}
+  body.travado{overflow:hidden}
+  @media(min-width:720px){
+    .ficha{left:50%;right:auto;bottom:auto;top:50%;width:460px;border-radius:6px;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:opacity .25s,transform .3s}
+    .ficha.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+    .ficha .alca{display:none}
+  }
   .status{max-width:1180px;margin:0 auto;padding:48px 24px;text-align:center;color:var(--soft);font-size:13px;letter-spacing:.1em}
   @media(max-width:640px){
     .bar{flex-direction:column;gap:14px}
@@ -204,6 +245,23 @@
   <div class="status" id="status">Carregando o catálogo…</div>
 </div>
 
+<div class="fundo" id="fundo"></div>
+<div class="ficha" id="ficha" role="dialog" aria-modal="true" aria-label="Ficha do produto">
+  <div class="alca"></div>
+  <button class="fechar" id="fFechar" aria-label="Fechar">&times;</button>
+  <div class="fpic"><img id="fImg" alt=""></div>
+  <div class="fnome" id="fNome"></div>
+  <div class="ffrase" id="fFrase"></div>
+  <div class="fcores" id="fCores"></div>
+  <div class="fcornome" id="fCorNome"></div>
+  <div class="ftec" id="fTec"></div>
+  <div class="facoes">
+    <button id="fBaixar">Baixar foto</button>
+    <button class="pri" id="fCopiar">Copiar descrição</button>
+  </div>
+</div>
+<div class="aviso" id="aviso"></div>
+
 <footer>
   <div class="foot-line">Coleção · Verão 26/27</div>
 </footer>
@@ -213,6 +271,7 @@
    CONFIGURAÇÃO — os únicos valores que talvez você precise mexer
    ============================================================ */
 const PLANILHA_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdb6qFDgmJRe_Rgqcm4K9a6OmXZ97sajYApbnYJyMWbrB3IjnkHkLtE1GLedOQkEFoaOuTqWfKNEgH/pub?gid=1734594426&single=true&output=csv";
+const FICHAS_CSV   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdb6qFDgmJRe_Rgqcm4K9a6OmXZ97sajYApbnYJyMWbrB3IjnkHkLtE1GLedOQkEFoaOuTqWfKNEgH/pub?gid=1433975832&single=true&output=csv";   // aba FICHAS (medidas)
 const REPO_REVENDA = "https://raw.githubusercontent.com/leonardonandes-cmyk/Revendedoras/main/";
 const REPO_FOTOS   = "https://raw.githubusercontent.com/leonardonandes-cmyk/Imagens-Cat-logo-/main/";
 const REPO_SITE    = "https://raw.githubusercontent.com/leonardonandes-cmyk/DBAESSE-catalogo/main/";
@@ -353,6 +412,7 @@ function cardHTML(p){
       <div class="name">${p.nome}</div>
       ${cores.length>1?`<div class="swatches">${dots}</div>`:""}
       <div class="cor-nome">${cores.length>1?first.cor:""}</div>
+      <button class="ver-ficha" type="button">Ver medidas</button>
     </div>
   </div>`;
 }
@@ -417,6 +477,9 @@ function ativar(){
         if(corNome) corNome.textContent=d.dataset.cor;
       });
     });
+    const abre=e=>{ e.preventDefault(); abrirFicha(nome, corNome&&corNome.textContent); };
+    card.querySelector(".frame").addEventListener("click",abre);
+    const vf=card.querySelector(".ver-ficha"); if(vf) vf.addEventListener("click",abre);
     const b=document.createElement("span");
     b.className="dl"; b.title="Baixar foto"; b.textContent="\u2193";
     b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();baixar(img.currentSrc||img.src,nome+"-"+((corNome&&corNome.textContent)||""));});
@@ -425,6 +488,87 @@ function ativar(){
 
   initCampCarousel();
 }
+
+/* ============ FICHA DO PRODUTO (aba FICHAS da planilha) ============ */
+const FICHAS={modelo:{},cat:{}}, PRODS={};
+const CAMPOS_FICHA=[{k:"cabedal",t:"Cabedal"},{k:"solado",t:"Solado"},{k:"salto",t:"Salto"},{k:"forma",t:"Forma"},{k:"numeracao",t:"Numeração"},{k:"peso",t:"Peso com caixa"},{k:"caixa",t:"Caixa"},{k:"medidas",t:"Medidas"}];
+/* MEDIDAS (coluna J da aba FICHAS): "34=22,5; 35=23; 36=23,5" → tabela da palmilha por número */
+function medidasLista(v){
+  const pares=String(v||"").split(/[;\/\n]|,(?=\s*\d{2}\s*[=:])/).map(x=>x.match(/^\s*(\d{2})\s*[=:]\s*([\d.,]+)\s*(cm)?\s*$/i)).filter(Boolean);
+  return pares.length>=2 ? pares.map(m=>({n:m[1], cm:m[2].replace(".",",")})) : null;
+}
+function medidasHTML(v){
+  const l=medidasLista(v);
+  if(!l) return `<div class="fl"><span>Medidas</span><b>${v}</b></div>`;
+  return `<div class="fmed"><div class="fmed-t">Tabela de medidas · palmilha (cm)</div><div class="fmed-g">`+
+    l.map(x=>`<div><span>${x.n}</span><b>${x.cm}</b></div>`).join("")+`</div></div>`;
+}
+function medidasTexto(v){
+  const l=medidasLista(v);
+  return l ? "Tabela de medidas (palmilha): "+l.map(x=>x.n+" = "+x.cm+" cm").join(" · ") : "Medidas: "+v;
+}
+function pesoFmt(v){                       // número pequeno = kg (0,4 → 0,4 kg); grande = g (400 → 400 g)
+  if(!/^[\d.,]+$/.test(v)) return v;
+  const n=parseFloat(v.replace(",",".")); if(isNaN(n)) return v;
+  return v+(n<20?" kg":" g");
+}
+function fichaDe(p){
+  const f=Object.assign({},FICHAS.cat[slug(p.cat)]||{},FICHAS.modelo[slug(p.nome)]||{});
+  if(f.peso) f.peso=pesoFmt(f.peso);
+  if(f.caixa && !/cm/i.test(f.caixa)) f.caixa+=" cm";
+  return f;
+}
+async function carregaFichas(){
+  try{
+    const t=await (await fetch(FICHAS_CSV+"&t="+Date.now())).text();
+    const rows=parseCSV(t); if(rows.length<2) return;
+    const h=rows[0].map(x=>slug(x)), col=k=>h.findIndex(x=>x.startsWith(k));
+    const ci={nome:col("nome"),cat:col("categoria")}; CAMPOS_FICHA.forEach(c=>ci[c.k]=col(c.k));
+    rows.slice(1).forEach(r=>{
+      const nome=cap(r[ci.nome]), cat=cap(r[ci.cat]), f={};
+      CAMPOS_FICHA.forEach(c=>{ const v=ci[c.k]>=0?cap(r[ci[c.k]]):""; if(v) f[c.k]=v; });
+      if(!Object.keys(f).length) return;
+      if(nome) FICHAS.modelo[slug(nome)]=Object.assign(FICHAS.modelo[slug(nome)]||{},f);
+      else if(cat) FICHAS.cat[slug(cat)]=Object.assign(FICHAS.cat[slug(cat)]||{},f);
+    });
+  }catch(e){ /* sem fichas: catálogo segue normal */ }
+}
+let FAT=null, FCOR=0;
+function aviso(t){ const a=$("#aviso"); a.textContent=t; a.classList.add("on"); clearTimeout(a._t); a._t=setTimeout(()=>a.classList.remove("on"),2200); }
+function mostraCorFicha(i){
+  const c=FAT.cores[i]; FCOR=i;
+  const img=$("#fImg"); img.onerror=function(){proximaFoto(this)}; trocaFoto(img,c.lista); img.alt=FAT.nome+" "+c.cor;
+  $("#fCorNome").textContent=FAT.cores.length>1?c.cor:"";
+  document.querySelectorAll("#fCores .dot").forEach((d,k)=>d.classList.toggle("on",k===i));
+}
+function abrirFicha(nome, corAtual){
+  const p=PRODS[slug(nome)]; if(!p) return; FAT=p;
+  $("#fNome").textContent=p.nome;
+  $("#fFrase").textContent=FRASES_CAT[slug(p.cat)]||"";
+  $("#fCores").innerHTML=p.cores.length>1?p.cores.map((c,k)=>`<span class="dot" data-k="${k}" style="background:${corHex(c.cor)}" title="${c.cor}"></span>`).join(""):"";
+  document.querySelectorAll("#fCores .dot").forEach(d=>d.addEventListener("click",()=>mostraCorFicha(+d.dataset.k)));
+  const ini=Math.max(0,p.cores.findIndex(c=>c.cor===corAtual)); mostraCorFicha(ini);
+  const f=fichaDe(p), linhas=CAMPOS_FICHA.filter(c=>f[c.k]).map(c=>c.k==="medidas" ? medidasHTML(f[c.k]) : `<div class="fl"><span>${c.t}</span><b>${f[c.k]}</b></div>`).join("");
+  $("#fTec").innerHTML=`<h4>Ficha técnica</h4>`+(linhas||`<div class="fl"><span>Medidas em breve</span><b></b></div>`);
+  $("#fundo").classList.add("on"); $("#ficha").classList.add("on"); document.body.classList.add("travado"); $("#ficha").scrollTop=0;
+}
+function fecharFicha(){ $("#fundo").classList.remove("on"); $("#ficha").classList.remove("on"); document.body.classList.remove("travado"); }
+function descricao(p){                      // sem marca e sem cidade: a revendedora usa como dela
+  const linhas=[p.nome]; const fr=FRASES_CAT[slug(p.cat)]; if(fr) linhas.push(fr); linhas.push("");
+  if(p.cat) linhas.push("Categoria: "+p.cat);
+  linhas.push("Cores disponíveis: "+p.cores.map(c=>c.cor).join(", "));
+  const f=fichaDe(p); CAMPOS_FICHA.forEach(c=>{ if(f[c.k]) linhas.push(c.k==="medidas" ? medidasTexto(f[c.k]) : c.t+": "+f[c.k]); });
+  linhas.push("Calçado feminino.");
+  return linhas.join("\n");
+}
+(function(){
+  $("#fundo").addEventListener("click",fecharFicha); $("#fFechar").addEventListener("click",fecharFicha);
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") fecharFicha(); });
+  $("#fCopiar").addEventListener("click",async()=>{ if(!FAT) return; const t=descricao(FAT);
+    try{ await navigator.clipboard.writeText(t); aviso("Descrição copiada"); }
+    catch(e){ const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy"); aviso("Descrição copiada");}catch(_){aviso("Não foi possível copiar");} ta.remove(); } });
+  $("#fBaixar").addEventListener("click",()=>{ if(!FAT) return; const img=$("#fImg"); baixar(img.currentSrc||img.src, FAT.nome+"-"+FAT.cores[FCOR].cor); });
+})();
 
 function initCampCarousel(){
   const vp=document.querySelector(".camp-viewport");
@@ -564,6 +708,8 @@ async function montar(){
   }
 
   const produtos=ordem.map(k=>mapa[k]).filter(p=>p.cores.length);
+  produtos.forEach(p=>PRODS[slug(p.nome)]=p);
+  await carregaFichas();
   if(!produtos.length){ $("#status").textContent="A planilha ainda não tem produtos com foto."; return; }
 
   if(bannerRevRef){ setHero(bannerRevRef); } else if(bannerRef){ setHero(bannerRef); }
